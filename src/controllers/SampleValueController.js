@@ -1,13 +1,14 @@
 const pool = require('../config/database');
 
 async function addSampleValue (req, res) { 
-	let params  = req.body;
-	console.log(params);
+	let body  = req;
+	console.log(body);
 	const newSampleValue = {
-		name: params.name
+		id_muestra: body.id_muestra,
+		id_atributo: body.id_muestra,
+		valor: body.valor
 	};
 	await pool.query('INSERT INTO SampleValue SET ?', [newSampleValue]);
-	console.log(`Saved SampleValue: ${newSampleValue.name}`);
 };
 
 async function deleteSampleValue (req, res) {
