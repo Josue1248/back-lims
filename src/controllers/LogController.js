@@ -5,43 +5,20 @@ const moment = require('moment-timezone');
 
 // Finish
 async function addLog (req, res) {
-	let body  = req.body;
+	let body  = req;
 	console.log(body)
-	const operator = await dbInteract.isExists(`SELECT * FROM Operator WHERE id='${body.operator}'`);
-	if(operator == false) {
-		res.send({
-			message: 'The operator doesn\'t exist'
-		});
-		return;
-	}
-
-	const sample = await dbInteract.isExists(`SELECT * FROM Sample WHERE name='${body.sample.toUpperCase()}'`);
-	if (sample == false) {
-		res.send({
-			message: 'The sample doesn\'t exist'
-		});
-		return;
-	}
-
-	const test = await dbInteract.isExists(`SELECT * FROM Test WHERE name='${body.test.toUpperCase()}'`);
-	if (test == false) {
-		res.send({
-			message: 'The test doesn\'t exists'
-		});
-		return;
-	}
+	const lastLog = await pool.query(`SELECT id_registro FROM Registros ORDER BY id_registro DESC LIMIT 1`);
+	// console.log(lastLog[0].id_registro)
+	// const id_registro = lastLog[0].id_registro + 1
+	// const id_operador = parseInt(body.id_operador)
+	// const id_muestra = parseInt(body.id_muestra)
+	// const id_prueba = parseInt(body.id_prueba)
+	// const id_estatus = parseInt(body.id_estatus)
 	
-	const status = await dbInteract.isExists(`SELECT * FROM Status WHERE name='${body.status.toUpperCase()}'`);
-	if (status == false) {
-		res.send({
-			message: 'The status doesn\'t exists'
-		});
-		return;
-	}
-	await pool.query(`INSERT INTO Log SET 
-		operator_Id = ${operator.result.id}, sample_Id = ${sample.result.id},
-		test_Id = ${test.result.id}, status_Id = ${status.result.id}, onCreated="${moment().tz("America/Los_Angeles").format().slice(0,19).replace('T', ' ')}"
-	`);
+	// await pool.query(`INSERT INTO Registros SET id_registro =${body.id_registro}
+	// 	id_operador = ${body.id_operador}, id_muestra = ${body.id_muestra},
+	// 	id_prueba = ${body.id_prueba}, id_estatus = ${body.id_estatus}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
+	// `);
 	
 };
 
