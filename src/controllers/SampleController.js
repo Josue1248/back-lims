@@ -5,20 +5,15 @@ const ValidateController = require('./ValidateController');
 
 // Finish
 async function addSample (req, res) {
-	let body  = req.body;
+	let muestra  = req.replace("MU","");
+	let id_muestra = muestra.replace(/-/g,"")
 
-	console.log(body)
-	if(!regex.validateSampleName(body.name.toUpperCase())) {
-		return;
-	}
-	if(await dbInteract.isExists(`SELECT * FROM Sample WHERE name='${body.name.toUpperCase()}'`)) {
-		return;
-	}
-	const newSample = {
-		name: body.name.toUpperCase()
+	const nuevaMuestra = {
+		id_muestra: id_muestra,
+		nombre: body.name.toUpperCase()
 	};
 	
-	await pool.query('INSERT INTO Sample SET ?', [newSample]);
+	await pool.query('INSERT INTO Sample SET ?', [nuevaMuestra]);
 };
 
 // Finish
@@ -55,7 +50,7 @@ async function getSampleByName (req, res) {
 			WHERE R.id_muestra='${sample.result.id_muestra}' and E.nombre like 'Muestra%' ORDER BY R.fecha ASC`)
 		console.log(states)
 		res.send({
-			estado: states[states.length - 1].Estado
+			estado: states[0].Estado
 		});
 	} else {
 		res.send({
