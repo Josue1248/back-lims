@@ -4,34 +4,16 @@ const regex = require('./../middlewares/regex');
 
 // Finish
 async function addOperator (req, res) {
-	let body  = req.body;
-	if (body.id > 99999) {
-		res.send({
-			message: 'The operator id exceeds the limit'
-		})
+	let operator  = req;
+
+	if (operator > 99999) {
+		console.log('The operator exeeds the limit')
+		return;
+	} else {
+		// await pool.query('INSERT INTO Operator SET ?', [newOperator]);
+		console.log('Insertion successful')
 		return;
 	}
-	const newOperator = {
-		id: body.id,
-		name: body.name.toUpperCase()
-	};
-	const validateOperator = await pool.query(`SELECT * FROM Operator WHERE id='${newOperator.id}'`);
-	if (validateOperator.length == 1) {
-		res.send({
-			message: 'This operator already exists!'
-		});
-		return;
-	}
-	if (!regex.notNumber(newOperator.name)) {
-		res.send({
-			message: 'Cannot add operator with numbers'
-		})
-		return;
-	}
-	await pool.query('INSERT INTO Operator SET ?', [newOperator]);
-	res.send({
-		message: 'Insertion successful'
-	});
 };
 
 // Finish
