@@ -5,21 +5,20 @@ const moment = require('moment-timezone');
 
 // Finish
 async function addLog (req, res) {
-	let body  = req;
-	console.log(body)
 	const lastLog = await pool.query(`SELECT id_registro FROM Registros ORDER BY id_registro DESC LIMIT 1`);
-	// console.log(lastLog[0].id_registro)
-	// const id_registro = lastLog[0].id_registro + 1
-	// const id_operador = parseInt(body.id_operador)
-	// const id_muestra = parseInt(body.id_muestra)
-	// const id_prueba = parseInt(body.id_prueba)
-	// const id_estatus = parseInt(body.id_estatus)
-	
-	// await pool.query(`INSERT INTO Registros SET id_registro =${body.id_registro}
-	// 	id_operador = ${body.id_operador}, id_muestra = ${body.id_muestra},
-	// 	id_prueba = ${body.id_prueba}, id_estatus = ${body.id_estatus}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
+
+	const log  = {
+		id_registro: lastLog[0].id_registro + 1,
+		id_operador: parseInt(req.id_operador),
+		id_muestra: parseInt(req.id_muestra),
+		id_prueba: parseInt(req.id_prueba),
+		id_estado: parseInt(req.id_estado)
+	};
+	console.log(log)
+	// await pool.query(`INSERT INTO Registros SET id_registro =${log.id_registro}
+	// 	id_operador = ${log.id_operador}, id_muestra = ${log.id_muestra},
+	// 	id_prueba = ${log.id_prueba}, id_estado = ${log.id_estado}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
 	// `);
-	
 };
 
 // Unnecessary
