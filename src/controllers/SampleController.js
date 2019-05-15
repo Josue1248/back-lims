@@ -1,7 +1,6 @@
 const pool = require('./../config/database');
 const regex = require('./../middlewares/regex');
 const dbInteract = require('./../middlewares/db-interact');
-const ValidateController = require('./ValidateController');
 
 // Finish
 async function addSample (req, res) {
@@ -10,10 +9,13 @@ async function addSample (req, res) {
 
 	const nuevaMuestra = {
 		id_muestra: id_muestra,
-		nombre: body.name.toUpperCase()
+		nombre: req
 	};
-	
-	await pool.query('INSERT INTO Sample SET ?', [nuevaMuestra]);
+	console.log(nuevaMuestra)
+	// await pool.query('INSERT INTO Sample SET ?', [nuevaMuestra]);
+	return({
+		id_muestra: id_muestra
+	})
 };
 
 // Finish
@@ -48,7 +50,7 @@ async function getSampleByName (req, res) {
 			JOIN Operador as O ON R.id_operador = O.id_operador
 			JOIN Muestras as M ON R.id_muestra = M.id_muestra
 			WHERE R.id_muestra='${sample.result.id_muestra}' and E.nombre like 'Muestra%' ORDER BY R.fecha ASC`)
-		console.log(states)
+
 		res.send({
 			estado: states[0].Estado
 		});
