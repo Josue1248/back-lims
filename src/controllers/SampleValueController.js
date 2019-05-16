@@ -9,7 +9,7 @@ async function addSampleValue (req, res) {
 		valor: body.valor
 	};
 	console.log(newSampleValue);
-	// await pool.query('INSERT INTO SampleValue SET ?', [newSampleValue]);
+	await pool.query('INSERT INTO SampleValue SET ?', [newSampleValue]);
 };
 
 async function deleteSampleValue (req, res) {
