@@ -15,10 +15,10 @@ async function addLog (req, res) {
 		id_estado: parseInt(req.id_estado)
 	};
 	console.log(log)
-	// await pool.query(`INSERT INTO Registros SET id_registro =${log.id_registro}
-	// 	id_operador = ${log.id_operador}, id_muestra = ${log.id_muestra},
-	// 	id_prueba = ${log.id_prueba}, id_estado = ${log.id_estado}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
-	// `);
+	await pool.query(`INSERT INTO Registros SET id_registro =${log.id_registro},
+		id_operador = ${log.id_operador}, id_muestra = ${log.id_muestra},
+		id_prueba = ${log.id_prueba}, id_estado = ${log.id_estado}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
+	`);
 };
 
 // Unnecessary
