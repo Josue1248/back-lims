@@ -10,7 +10,7 @@ async function addOperator (req, res) {
 		console.log('The operator exeeds the limit')
 		return;
 	} else {
-		// await pool.query('INSERT INTO Operator SET ?', [newOperator]);
+		await pool.query('INSERT INTO Operator SET ?', [newOperator]);
 		console.log('Insertion successful')
 		return;
 	}
