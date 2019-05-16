@@ -12,7 +12,7 @@ async function addSample (req, res) {
 		nombre: req
 	};
 	console.log(nuevaMuestra)
-	// await pool.query('INSERT INTO Sample SET ?', [nuevaMuestra]);
+	await pool.query('INSERT INTO Muestras SET ?', [nuevaMuestra]);
 	return({
 		id_muestra: id_muestra
 	})
@@ -39,24 +39,23 @@ async function getSampleByName (req, res) {
 	const sample = await dbInteract.isExists(`SELECT id_muestra, nombre FROM Muestras WHERE nombre='${params.name}'`);
 
 	if (sample.result != undefined){
-		const states = await pool.query(`SELECT O.id_operador AS 'Operador', 
-				M.nombre AS 'Muestra',
-				E.nombre AS 'Estado',
-				P.nombre AS 'Prueba',
-				R.fecha AS 'Fecha'
+		const states = await pool.query(`SELECT
+				E.nombre AS 'estado'
 			FROM Registros as R
 			JOIN Estado as E ON R.id_estado = E.id_estado
 			JOIN Pruebas as P ON R.id_prueba = P.id_prueba
 			JOIN Operador as O ON R.id_operador = O.id_operador
 			JOIN Muestras as M ON R.id_muestra = M.id_muestra
-			WHERE R.id_muestra='${sample.result.id_muestra}' and E.nombre like 'Muestra%' ORDER BY R.fecha ASC`)
+			WHERE R.id_muestra='${sample.result.id_muestra}' and E.nombre like 'Muestra%'`)
 
 		res.send({
-			estado: states[0].Estado
+			estados: states
 		});
 	} else {
 		res.send({
-			estado: 'Nueva muestra'
+			estados: [{
+				estado: 'Nueva muestra'
+			}]
 		});
 	}
 
