@@ -12,10 +12,17 @@ async function addSample (req, res) {
 		nombre: req
 	};
 	console.log(nuevaMuestra)
-	await pool.query('INSERT INTO Muestras SET ?', [nuevaMuestra]);
+	const exists = await dbInteract.isExists(`SELECT * FROM Muestras WHERE nombre='${req}'`);
+
+	if(exists == false) {
+		await pool.query('INSERT INTO Muestras SET ?', [nuevaMuestra]);
+	} else {
+		console.log(exists)
+	}
 	return({
 		id_muestra: id_muestra
 	})
+
 };
 
 // Finish
