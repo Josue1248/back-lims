@@ -68,7 +68,7 @@ async function insertData(req, res) {
 			} else {
 				for await (const state of body.states){
 					const estado = await dbInteract.isExists(`SELECT * FROM Estado WHERE nombre='${state}'`);
-					const newSample = await require('./SampleController').addSample(sample, res)
+					const newSample = (muestra == false) ? await require('./SampleController').addSample(sample, res) : muestra.result
 
 					const log = {
 						id_operador: parseInt(body.operator, 10),
