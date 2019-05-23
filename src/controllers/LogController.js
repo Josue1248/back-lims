@@ -6,18 +6,20 @@ const moment = require('moment-timezone');
 // Finish
 async function addLog (req, res) {
 	const lastLog = await pool.query(`SELECT id_registro FROM Registros ORDER BY id_registro DESC LIMIT 1`);
+	const dateTime = moment().tz("America/Los_Angeles").format()
 
 	const log  = {
 		id_registro: lastLog[0].id_registro + 1,
 		id_operador: parseInt(req.id_operador),
 		id_muestra: parseInt(req.id_muestra),
 		id_prueba: parseInt(req.id_prueba),
-		id_estado: parseInt(req.id_estado)
+		id_estado: parseInt(req.id_estado),
+		fecha: dateTime.replace('T',' ').slice(0, -6)
 	};
 	console.log(log)
 	await pool.query(`INSERT INTO Registros SET id_registro =${log.id_registro},
 		id_operador = ${log.id_operador}, id_muestra = ${log.id_muestra},
-		id_prueba = ${log.id_prueba}, id_estado = ${log.id_estado}, fecha="${moment().tz("America/Los_Angeles").format('MMMM Do YYYY, h:mm:ss a')}"
+		id_prueba = ${log.id_prueba}, id_estado = ${log.id_estado}, fecha="${log.fecha}"
 	`);
 };
 
@@ -82,9 +84,9 @@ async function getLogBySample (req, res) {
 	`);
 
 	const attributes = await pool.query(`
-		SELECT M.nombre AS 'Muestra',
-			A.nombre as'Atributo',
-			VM.valor as 'Valor'
+		SELECT A.nombre as'Atributo',
+			VM.valor as 'Valor',
+			unidad as Unidad
 		FROM ValoresMuestras as VM
 		JOIN Atributos as A ON VM.id_atributo = A.id_atributo
 		JOIN Muestras as M ON VM.id_muestra = M.id_muestra
@@ -92,7 +94,7 @@ async function getLogBySample (req, res) {
 	`);
 
 	for await (const result of value) {
-		result['Fecha'] = result['Fecha'].toString().slice(0,25);
+		result['Fecha'] = result['Fecha'].toISOString().replace('T',' ').slice(0, -5)
 	}
 	
 	if (value[0] == undefined) {
