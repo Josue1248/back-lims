@@ -4,14 +4,14 @@ const regex = require('./../middlewares/regex');
 
 // Finish
 async function addOperator (req, res) {
-	let operator  = req;
+	let operator  = {id_operador: req};
 
 	if (operator > 99999) {
 		console.log('The operator exeeds the limit')
 		return;
 	} else {
-		await pool.query('INSERT INTO Operator SET ?', [newOperator]);
-		console.log('Insertion successful')
+		console.log(operator)
+		await pool.query('INSERT INTO Operador SET ?', [operator]);
 		return;
 	}
 };
