@@ -40,6 +40,7 @@ async function insertData(req, res) {
 						
 						if (atributo == false) {
 							res.send({
+								success: false,
 								message: 'El atributo ' + attribute.name + ' no existe'
 							});
 							return;
@@ -84,10 +85,10 @@ async function insertData(req, res) {
 			}
 		}
 	}
-
+	
 	res.send({
 		success: true,
-		message: 'Inserción exitosa'
+		message: (body.samples.length > 1) ? 'Las muestras han sido guardadas con exito' : 'La muestra ha sido guardada con exito'
 	})
 }
 
