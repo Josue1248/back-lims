@@ -16,6 +16,7 @@ async function insertData(req, res) {
 	// console.log(prueba.result)
 	if (prueba == false) {
 		res.send({
+			success: false,
 			message: 'El test no existe'
 		});
 		return;
@@ -27,6 +28,7 @@ async function insertData(req, res) {
 		// console.log(muestra.result)
 		if (muestra == false && prueba.result.id_prueba > 1) {
 			res.send({
+				success: false,
 				message: 'La muestra' + sample + ' no existe'
 			})
 			return
@@ -84,6 +86,7 @@ async function insertData(req, res) {
 	}
 
 	res.send({
+		success: true,
 		message: 'Inserción exitosa'
 	})
 }
