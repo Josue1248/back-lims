@@ -59,28 +59,36 @@ async function insertData(req, res) {
 				for await (const state of body.states){
 					const estado = await dbInteract.isExists(`SELECT * FROM Estado WHERE nombre='${state}'`);
 
-					const log = {
-						id_operador: parseInt(body.operator, 10),
-						id_prueba: prueba.result.id_prueba,
-						id_muestra: muestra.result.id_muestra,
-						id_estado: estado.result.id_estado
-					}
+					if (estado == false) {
+						res.send({
+							success: false,
+							message: 'El estado ' + state.name + ' no existe'
+						});
+						return;
+					} 
 
-					await require('./LogController').addLog(log, res);
 				}
 			} else {
 				for await (const state of body.states){
 					const estado = await dbInteract.isExists(`SELECT * FROM Estado WHERE nombre='${state}'`);
 					const newSample = (muestra == false) ? await require('./SampleController').addSample(sample, res) : muestra.result
 
-					const log = {
-						id_operador: parseInt(body.operator, 10),
-						id_prueba: prueba.result.id_prueba,
-						id_muestra: parseInt(newSample.id_muestra, 10),
-						id_estado: estado.result.id_estado
+					if (estado == false) {
+						res.send({
+							success: false,
+							message: 'El estado ' + state.name + ' no existe'
+						});
+						return;
+					} else {
+						const log = {
+							id_operador: parseInt(body.operator, 10),
+							id_prueba: prueba.result.id_prueba,
+							id_muestra: parseInt(newSample.id_muestra, 10),
+							id_estado: estado.result.id_estado
+						}
+	
+						await require('./LogController').addLog(log, res);
 					}
-
-					await require('./LogController').addLog(log, res);
 				}
 			}
 		}
