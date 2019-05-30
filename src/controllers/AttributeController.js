@@ -56,9 +56,15 @@ async function getAttributeByName (req, res) {
 	
 	const value = await pool.query(`SELECT * FROM ValoresMuestras WHERE valor='${params.name}'`);
 
-	if(value == '') {
+	if(value.length == 0) {
+		res.send({
+			exists: false,
+			message: "El quimico no a sido registrado" 
+		})
+	} else {
 		res.send({ 
-			message: "El atributo no a sido registrado" 
+			exists: true,
+			message: "El quimico ya fue registrado" 
 		})
 	}
 };
