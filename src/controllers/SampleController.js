@@ -53,7 +53,7 @@ async function getSampleByName (req, res) {
 			JOIN Pruebas as P ON R.id_prueba = P.id_prueba
 			JOIN Operador as O ON R.id_operador = O.id_operador
 			JOIN Muestras as M ON R.id_muestra = M.id_muestra
-			WHERE R.id_muestra='${sample.result.id_muestra}' and E.nombre like 'Muestra%'`)
+			WHERE R.id_muestra='${sample.result.id_muestra}'`)
 
 		res.send({
 			estados: states
